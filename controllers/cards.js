@@ -8,7 +8,7 @@ module.exports.getCards = (req, res) => {
 };
 
 module.exports.createCard = (req, res) => {
-  const { name, link, owner = req.user._id } = req.body;
+  const { name, link, owner = req.user.userId } = req.body;
 
   Card.create({ name, link, owner })
     .then((card) => res.send({ data: card }))
