@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 const {
-  SERVER_ERROR, BAD_REQUEST, NOT_FOUND, UNAUTHORIZED,
+  SERVER_ERROR, BAD_REQUEST, NOT_FOUND, UNAUTHORIZED, CONFLICT,
 } = require('../utils/constants');
 
 module.exports.getUsers = (req, res) => {
@@ -40,6 +40,9 @@ module.exports.createUser = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST).send({ message: 'Ошибка ввода' });
+      }
+      if (err.code === 11000) {
+        res.status(CONFLICT).send({ message: 'Пользователь с таким email уже зарегистрирован' });
       } else { res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' }); }
     });
 };
