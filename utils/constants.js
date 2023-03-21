@@ -4,4 +4,6 @@ const NOT_FOUND = 404;
 
 const BAD_REQUEST = 400;
 
-module.exports = { SERVER_ERROR, NOT_FOUND, BAD_REQUEST };
+const UNAUTHORIZED = 401;
+
+module.exports = { SERVER_ERROR, NOT_FOUND, BAD_REQUEST, UNAUTHORIZED };
