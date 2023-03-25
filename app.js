@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { celebrate, Joi, errors } = require('celebrate');
 const { login, createUser } = require('./controllers/users');
-const { NOT_FOUND } = require('./utils/constants');
 const auth = require('./middlewares/auth');
+const NotFoundError = require('./errors/NotFoundError');
 
 const { PORT = 3000 } = process.env;
 
@@ -35,11 +35,10 @@ app.post('/signup', celebrate({
   }),
 }), createUser);
 
-app.use((req, res) => {
-  res.status(NOT_FOUND).send({ message: 'Страница не существует' });
+app.use((req, res, next) => {
+  throw new NotFoundError('Страница не существует')
+    .catch(next);
 });
-
-app.use(auth);
 
 app.use(errors());
 // eslint-disable-next-line no-unused-vars

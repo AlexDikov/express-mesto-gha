@@ -1,5 +1,5 @@
-const BadRequestError = require('../errors.js/BadRequestError');
-const NotFoundError = require('../errors.js/NotFoundError');
+const BadRequestError = require('../errors/BadRequestError');
+const NotFoundError = require('../errors/NotFoundError');
 const Card = require('../models/card');
 
 module.exports.getCards = (res, next) => {
@@ -10,7 +10,6 @@ module.exports.getCards = (res, next) => {
 
 module.exports.createCard = (req, res, next) => {
   const { name, link, owner = req.user.userId } = req.body;
-
   Card.create({ name, link, owner })
     .then((card) => {
       if (!card) {
@@ -23,7 +22,7 @@ module.exports.createCard = (req, res, next) => {
 };
 
 module.exports.deleteCard = (req, res, next) => {
-  Card.findByIdAndRemove(req.params.cardId)
+  Card.findById(req.params.cardId)
     .then((card) => {
       if (!card) {
         throw new NotFoundError('Пользователь не найден');
@@ -31,6 +30,7 @@ module.exports.deleteCard = (req, res, next) => {
       if (card.owner !== req.user.userId) {
         throw new BadRequestError('Невозможно удалить карточку другого пользователя' );
       } else {
+        Card.deleteOne(req.params.cardId);
         res.send({ data: card });
       }
     })

@@ -11,23 +11,23 @@ const {
 router.get('/', getCards);
 
 router.delete('/:cardId', celebrate({
-  query: Joi.string().alphanum().length(24),
+  params: Joi.string().alphanum().length(24),
 }), deleteCard);
 
 router.post('/', celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
     // eslint-disable-next-line no-useless-escape
-    avatar: Joi.string().required().regex(/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/),
+    link: Joi.string().required().regex(/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/),
   }),
 }), createCard);
 
 router.put('/:cardId/likes', celebrate({
-  query: Joi.string().alphanum().length(24),
+  params: Joi.string().alphanum().length(24),
 }), likeCard);
 
 router.delete('/:cardId/likes', celebrate({
-  query: Joi.string().alphanum().length(24),
+  params: Joi.string().alphanum().length(24),
 }), dislikeCard);
 
 module.exports = router;

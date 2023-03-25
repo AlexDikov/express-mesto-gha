@@ -1,8 +1,9 @@
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const BadRequestError = require('../errors.js/BadRequestError');
-const NotFoundError = require('../errors.js/NotFoundError');
-const UnauthorizedError = require('../errors.js/UnauthorizedError');
+const BadRequestError = require('../errors/BadRequestError');
+const ConflictError = require('../errors/ConflictError');
+const NotFoundError = require('../errors/NotFoundError');
+const UnauthorizedError = require('../errors/UnauthorizedError');
 const User = require('../models/user');
 
 module.exports.getUsers = (res, next) => {
@@ -35,7 +36,7 @@ module.exports.getUserById = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.createUser = (req, res, next) => {
+module.exports.createUser = (err, req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
@@ -46,6 +47,9 @@ module.exports.createUser = (req, res, next) => {
     .then((user) => {
       if (!user) {
         throw new UnauthorizedError('Пользователь не авторизован');
+      }
+      if (err.code === 11000) {
+        throw new ConflictError('Пользователь с таким email уже зарегистрирован');
       } else res.send({ data: user });
     })
     .catch(next);
@@ -57,7 +61,7 @@ module.exports.login = (req, res, next) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       if (!user) {
-        throw new UnauthorizedError('Пользователь не авторизован');
+        throw new BadRequestError('Введены неверные почта или пароль');
       } else {
         const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
         res.send({ token });
