@@ -25,14 +25,13 @@ module.exports.deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
     .then((card) => {
       if (!card) {
-        throw new NotFoundError('Пользователь не найден');
+        throw new NotFoundError('Карточка не найдена');
       }
       if (card.owner !== req.user.userId) {
         throw new BadRequestError('Невозможно удалить карточку другого пользователя');
-      } else {
-        Card.deleteOne(req.params.cardId);
-        res.send({ data: card });
       }
+      return Card.deleteOne(req.params.cardId)
+        .then(() => { res.send({ data: card }); });
     })
     .catch(next);
 };

@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 const { celebrate, Joi, errors } = require('celebrate');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
@@ -40,7 +40,7 @@ app.post('/signup', celebrate({
 }), createUser);
 
 app.use((req, res, next) => {
-  throw new NotFoundError('Страница не существует')
+  Promise.reject(new NotFoundError('Страница не существует'))
     .catch(next);
 });
 
@@ -59,5 +59,4 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log('ВСЕ ОК');
 });

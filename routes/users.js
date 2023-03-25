@@ -11,13 +11,13 @@ const {
 router.get('/', getUsers);
 
 router.get('/me', celebrate({
-  headers: Joi.object().keys({
-    authorization: Joi.string().alphanum(),
+  cookies: Joi.object().keys({
+    authorization: Joi.string().required(),
   }),
 }), getUser);
 
 router.get('/:userId', celebrate({
-  query: Joi.string().hex().length(24),
+  params: { usedId: Joi.string().hex().length(24) },
 }), getUserById);
 
 router.patch('/me', celebrate({
