@@ -28,7 +28,7 @@ module.exports.deleteCard = (req, res, next) => {
         throw new NotFoundError('Пользователь не найден');
       }
       if (card.owner !== req.user.userId) {
-        throw new BadRequestError('Невозможно удалить карточку другого пользователя' );
+        throw new BadRequestError('Невозможно удалить карточку другого пользователя');
       } else {
         Card.deleteOne(req.params.cardId);
         res.send({ data: card });
