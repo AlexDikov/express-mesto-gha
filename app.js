@@ -26,7 +26,7 @@ app.post('/signin', celebrate({
     email: Joi.string().required().min(2).max(30)
       .allow(null, undefined),
     password: Joi.string().required().min(2).max(30),
-  }),
+  }).allow(null, undefined),
 }), login);
 
 app.post('/signup', celebrate({
