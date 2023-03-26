@@ -4,6 +4,7 @@ const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 const ConflictError = require('../errors/ConflictError');
 const User = require('../models/user');
+const UnauthorizedError = require('../errors/UnauthorizedError');
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
@@ -24,7 +25,7 @@ module.exports.getUser = (req, res, next) => {
 };
 
 module.exports.getUserById = (req, res, next) => {
-  User.findById(req.params.userId)
+  User.findById(req.user._id)
     .then((user) => {
       if (!user) {
         throw new NotFoundError('Нет пользователя с таким id');
@@ -71,7 +72,7 @@ module.exports.login = (req, res, next) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       if (!user) {
-        throw new BadRequestError('Введены неверные почта или пароль');
+        throw new UnauthorizedError('Введены неверные почта или пароль');
       } else {
         const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
         const cookieValue = `Bearer ${token}`;
