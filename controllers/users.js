@@ -72,7 +72,7 @@ module.exports.login = (req, res, next) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       if (!user) {
-        throw new UnauthorizedError('Введены неверные почта или пароль');
+        throw new BadRequestError('Введены неверные почта или пароль');
       } else {
         const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
         const cookieValue = `Bearer ${token}`;
