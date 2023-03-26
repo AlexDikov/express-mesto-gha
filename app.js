@@ -23,9 +23,9 @@ app.use('/cards', auth, require('./routes/cards'));
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
-    email: Joi.string().min(2).max(30),
+    email: Joi.string().required().min(2).max(30),
     password: Joi.string().required().min(2).max(30),
-  }),
+  }).empty(null).allow(null),
 }), login);
 
 app.post('/signup', celebrate({
