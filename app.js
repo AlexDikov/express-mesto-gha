@@ -43,8 +43,7 @@ app.post('/signup', celebrate({
 }), createUser);
 
 app.use((req, res, next) => {
-  Promise.reject(new NotFoundError('Страница не существует'))
-    .catch(next);
+  next(new NotFoundError('Страница не существует'));
 });
 
 app.use(errors());

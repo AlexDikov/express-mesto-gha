@@ -39,13 +39,7 @@ module.exports.createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
-  User.findOne({ email })
-    .then((user) => {
-      if (user) {
-        throw new ConflictError('Пользователь с таким email уже зарегистрирован');
-      }
-      return bcryptjs.hash(password, 10);
-    })
+  bcryptjs.hash(password, 10)
     .then((hash) => User.create({
       name, about, avatar, email, password: hash,
     }))
