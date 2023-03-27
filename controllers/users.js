@@ -44,17 +44,19 @@ module.exports.createUser = (req, res, next) => {
       name, about, avatar, email, password: hash,
     }))
     .then((user) => {
-      if (user.email === email) {
-        throw new ConflictError('Пользователь с таким email уже зарегистрирован');
-      } else {
-        res.send({
-          data: {
-            name: user.name, about: user.about, avatar: user.avatar, email: user.email,
-          },
-        });
-      }
+      res.send({
+        data: {
+          name: user.name, about: user.about, avatar: user.avatar, email: user.email,
+        },
+      });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.code === 11000) {
+        next(new ConflictError('Пользователь с таким email уже зарегистрирован'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.login = (req, res, next) => {
