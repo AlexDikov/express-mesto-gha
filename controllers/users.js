@@ -17,7 +17,7 @@ module.exports.getUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Нет пользователя с таким id');
       } else {
-        res.send({ data: user });
+        res.send(user);
       }
     })
     .catch(next);
@@ -29,7 +29,7 @@ module.exports.getUserById = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Нет пользователя с таким id');
       } else {
-        res.send({ data: user });
+        res.send(user);
       }
     })
     .catch(next);
@@ -68,12 +68,6 @@ module.exports.login = (req, res, next) => {
         throw new BadRequestError('Введены неверные почта или пароль');
       } else {
         const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
-        const cookieValue = `Bearer ${token}`;
-        res
-          .cookie('authorization', cookieValue, {
-            maxAge: 3600000 * 24 * 7,
-            httpOnly: true,
-          });
         res.send({ token })
           .end();
       }
@@ -95,7 +89,7 @@ module.exports.modifyUser = (req, res, next) => {
     .then((user) => {
       if (!user) {
         throw new BadRequestError('Ошибка ввода');
-      } else res.send({ data: user });
+      } else res.send(user);
     })
     .catch(next);
 };

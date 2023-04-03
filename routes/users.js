@@ -11,9 +11,9 @@ const {
 router.get('/', getUsers);
 
 router.get('/me', celebrate({
-  cookies: Joi.object().keys({
+  headers: Joi.object().keys({
     authorization: Joi.string().required(),
-  }),
+  }).options({ allowUnknown: true }),
 }), getUser);
 
 router.get('/:userId', celebrate({

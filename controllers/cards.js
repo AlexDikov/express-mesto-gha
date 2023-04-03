@@ -5,7 +5,7 @@ const Card = require('../models/card');
 
 module.exports.getCards = (req, res, next) => {
   Card.find({})
-    .then((cards) => res.send({ data: cards }))
+    .then((cards) => res.send(cards))
     .catch(next);
 };
 
@@ -16,7 +16,7 @@ module.exports.createCard = (req, res, next) => {
       if (!card) {
         throw new BadRequestError('Ошибка ввода');
       } else {
-        res.send({ data: card });
+        res.send(card);
       }
     })
     .catch(next);
@@ -47,7 +47,7 @@ module.exports.likeCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError('Пользователь не найден');
       } else {
-        res.send({ data: card });
+        res.send(card);
       }
     })
     .catch(next);
@@ -62,7 +62,7 @@ module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
     if (!card) {
       throw new NotFoundError('Пользователь не найден');
     } else {
-      res.send({ data: card });
+      res.send(card);
     }
   })
   .catch(next);
